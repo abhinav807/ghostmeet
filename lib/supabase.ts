@@ -7,6 +7,11 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export const getServerSupabase = () => {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-  return createClient(url, key);
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (serviceRoleKey) {
+    return createClient(url, serviceRoleKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+  }
+  return createClient(url, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 };

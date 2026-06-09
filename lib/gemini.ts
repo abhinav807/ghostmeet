@@ -2,7 +2,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { ActionItem, KeyDecision, GenerationResponse } from "@/types/meeting";
 
 const getGenAI = () => {
-  const apiKey = process.env.GEMINI_API_KEY!;
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is not configured. Add it to your .env file.");
+  }
   return new GoogleGenerativeAI(apiKey);
 };
 
