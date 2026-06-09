@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { ActionItem, KeyDecision, GenerationResponse } from "@/types/meeting";
+import { isDemoMode, mockTranscribeAudio, mockGenerateMeetingInsights } from "@/lib/mock-data";
 
 const getGenAI = () => {
   const apiKey = process.env.GEMINI_API_KEY;
@@ -10,6 +11,10 @@ const getGenAI = () => {
 };
 
 export async function transcribeAudio(audioBuffer: Buffer, mimeType: string): Promise<{ transcript: string; duration: number }> {
+  if (isDemoMode()) {
+    return mockTranscribeAudio(audioBuffer, mimeType);
+  }
+
   const genAI = getGenAI();
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -30,6 +35,10 @@ export async function transcribeAudio(audioBuffer: Buffer, mimeType: string): Pr
 }
 
 export async function generateMeetingInsights(transcript: string): Promise<GenerationResponse> {
+  if (isDemoMode()) {
+    return mockGenerateMeetingInsights(transcript);
+  }
+
   const genAI = getGenAI();
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Ghost, Moon, Sun, Menu, X } from "lucide-react";
+import { Ghost, Moon, Sun, Menu, X, FlaskConical } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -14,6 +15,8 @@ const navLinks = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/upload", label: "Upload" },
 ];
+
+const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -75,6 +78,15 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
+          {isDemo && (
+            <Badge
+              variant="outline"
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-medium border-amber-500/30 bg-amber-500/10 text-amber-400"
+            >
+              <FlaskConical className="h-3 w-3" />
+              Demo Mode
+            </Badge>
+          )}
           {mounted && (
             <Button
               variant="ghost"
@@ -107,6 +119,17 @@ export function Navbar() {
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden bg-background/95 backdrop-blur-xl border-b border-white/10 px-4 pb-4"
         >
+          {isDemo && (
+            <div className="mb-3">
+              <Badge
+                variant="outline"
+                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-medium border-amber-500/30 bg-amber-500/10 text-amber-400"
+              >
+                <FlaskConical className="h-3 w-3" />
+                Demo Mode
+              </Badge>
+            </div>
+          )}
           {navLinks.map((link) => (
             <Link
               key={link.href}

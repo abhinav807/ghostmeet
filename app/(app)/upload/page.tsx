@@ -13,6 +13,10 @@ import {
   Mic,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { FlaskConical } from "lucide-react";
+
+const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
 const ACCEPTED_TYPES = [
   "audio/mpeg",
@@ -139,6 +143,15 @@ export default function UploadPage() {
           <p className="text-muted-foreground mt-1">
             Drop your audio recording and let AI do the rest
           </p>
+          {isDemo && (
+            <Badge
+              variant="outline"
+              className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-medium border-amber-500/30 bg-amber-500/10 text-amber-400"
+            >
+              <FlaskConical className="h-3 w-3" />
+              Demo Mode — simulated AI processing
+            </Badge>
+          )}
         </motion.div>
 
         <motion.div

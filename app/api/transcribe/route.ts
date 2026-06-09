@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSupabase } from "@/lib/supabase";
 import { transcribeAudio } from "@/lib/gemini";
+import { isDemoMode } from "@/lib/mock-data";
 
 const VALID_EXTENSIONS = /\.(mp3|wav|m4a)$/i;
 const VALID_MIME_TYPES = new Set([
@@ -14,6 +15,8 @@ const VALID_MIME_TYPES = new Set([
   "video/mp4",
 ]);
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,6 +37,10 @@ export async function POST(req: NextRequest) {
 
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json({ error: "File too large. Max 100MB" }, { status: 400 });
+    }
+
+    if (isDemoMode()) {
+      await sleep(2000);
     }
 
     const supabase = getServerSupabase();
